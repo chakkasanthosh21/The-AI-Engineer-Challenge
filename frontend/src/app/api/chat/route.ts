@@ -3,24 +3,24 @@ import OpenAI from 'openai';
 
 export const runtime = 'edge';
 
+const modelMap = {
+  'GPT-3.5 Turbo': 'gpt-3.5-turbo',
+  'GPT-4': 'gpt-4',
+  'GPT-3.5 Turbo 16K': 'gpt-3.5-turbo-16k',
+  'GPT-4 32K': 'gpt-4-32k'
+};
+
 export async function POST(req: Request) {
   try {
-    const { messages, apiKey, systemPrompt } = await req.json();
+    const { messages, model } = await req.json();
 
-    if (!apiKey) {
-      return new Response('OpenAI API key is required', { status: 400 });
-    }
-
-    const openai = new OpenAI({ apiKey });
-
-    // Add system message if provided
-    const finalMessages = systemPrompt
-      ? [{ role: 'system', content: systemPrompt }, ...messages]
-      : messages;
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY
+    });
 
     const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: finalMessages,
+      model: modelMap[model as keyof typeof modelMap] || 'gpt-3.5-turbo',
+      messages,
       temperature: 0.7,
       stream: true,
     });

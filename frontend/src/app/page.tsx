@@ -2,132 +2,110 @@
 
 import { useState } from 'react';
 import { useChat } from 'ai/react';
+import Link from 'next/link';
 
-const roles = [
-  "You are a helpful AI assistant.",
-  "You are a wise Python programmer.",
-  "You are a creative writing expert.",
-  "You are a data science expert.",
-  "You are a web development expert.",
-  "You are a system design expert.",
-  "You are a cybersecurity expert.",
-  "You are a machine learning expert.",
-  "You are a software architecture expert.",
-  "You are a database optimization expert."
+const models = [
+  'GPT-3.5 Turbo',
+  'GPT-4',
+  'GPT-3.5 Turbo 16K',
+  'GPT-4 32K'
 ];
 
 export default function Home() {
-  const [apiKey, setApiKey] = useState('');
-  const [selectedRole, setSelectedRole] = useState(roles[0]);
-  const [customPrompt, setCustomPrompt] = useState('');
-  const [showCustomPrompt, setShowCustomPrompt] = useState(false);
-
+  const [selectedModel, setSelectedModel] = useState(models[0]);
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
     api: '/api/chat',
     body: {
-      apiKey,
-      systemPrompt: showCustomPrompt ? customPrompt : selectedRole
+      model: selectedModel
     }
   });
 
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!apiKey) {
-      alert('Please enter your OpenAI API key');
-      return;
-    }
-    handleSubmit(e);
-  };
-
   return (
-    <main className="flex min-h-screen flex-col items-center p-4 bg-gray-50">
-      <div className="w-full max-w-4xl space-y-4">
-        <h1 className="text-2xl font-bold text-center mb-8">AI Chat Interface</h1>
-        
-        {/* API Key Input */}
-        <input
-          type="password"
-          placeholder="Enter your OpenAI API key"
-          value={apiKey}
-          onChange={(e) => setApiKey(e.target.value)}
-          className="w-full p-2 border rounded shadow-sm"
-        />
+    <div className="min-h-screen bg-white">
+      {/* Navigation */}
+      <nav className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16">
+            <div className="flex">
+              <div className="flex-shrink-0 flex items-center">
+                <h1 className="text-xl font-bold">AI Engineer</h1>
+              </div>
+              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <Link href="/" className="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Home
+                </Link>
+                <Link href="/about" className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  About
+                </Link>
+                <Link href="/dashboard" className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Dashboard
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
 
-        {/* Role Selection */}
-        <div className="flex flex-wrap gap-2">
-          {roles.map((role) => (
+      {/* Main Content */}
+      <main className="max-w-4xl mx-auto p-4">
+        <h1 className="text-2xl font-bold text-center my-8">AI Chat Interface</h1>
+        
+        {/* Model Selection */}
+        <div className="flex flex-wrap gap-2 justify-center mb-8">
+          {models.map((model) => (
             <button
-              key={role}
-              onClick={() => {
-                setSelectedRole(role);
-                setShowCustomPrompt(false);
-              }}
-              className={`px-3 py-1 rounded text-sm ${
-                selectedRole === role && !showCustomPrompt
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-200 hover:bg-gray-300'
+              key={model}
+              onClick={() => setSelectedModel(model)}
+              className={`px-4 py-2 rounded ${
+                selectedModel === model
+                  ? 'bg-indigo-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              {role.replace('You are ', '')}
+              {model}
             </button>
           ))}
-          <button
-            onClick={() => setShowCustomPrompt(true)}
-            className={`px-3 py-1 rounded text-sm ${
-              showCustomPrompt
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 hover:bg-gray-300'
-            }`}
-          >
-            + Add Custom Prompt
-          </button>
         </div>
 
-        {/* Custom Prompt Input */}
-        {showCustomPrompt && (
-          <input
-            type="text"
-            placeholder="Enter custom system prompt"
-            value={customPrompt}
-            onChange={(e) => setCustomPrompt(e.target.value)}
-            className="w-full p-2 border rounded shadow-sm"
-          />
-        )}
-
         {/* Messages */}
-        <div className="space-y-4 mt-4">
+        <div className="space-y-4 mb-8 h-[50vh] overflow-y-auto">
           {messages.map((message) => (
             <div
               key={message.id}
               className={`p-4 rounded-lg ${
                 message.role === 'user'
-                  ? 'bg-blue-100 ml-auto'
-                  : 'bg-white border'
+                  ? 'bg-indigo-50 ml-auto'
+                  : 'bg-gray-50'
               } max-w-[80%]`}
             >
               <p className="whitespace-pre-wrap">{message.content}</p>
             </div>
           ))}
+          {isLoading && (
+            <div className="bg-gray-50 p-4 rounded-lg max-w-[80%]">
+              <p>Thinking...</p>
+            </div>
+          )}
         </div>
 
         {/* Input Form */}
-        <form onSubmit={onSubmit} className="flex gap-2">
+        <form onSubmit={handleSubmit} className="flex gap-2">
           <input
             type="text"
             value={input}
             onChange={handleInputChange}
             placeholder="Type your message..."
-            className="flex-1 p-2 border rounded shadow-sm"
+            className="flex-1 p-2 border rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           />
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="px-4 py-2 bg-blue-500 text-white rounded shadow-sm hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             Send
           </button>
         </form>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

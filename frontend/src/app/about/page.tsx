@@ -1,52 +1,50 @@
+import Link from 'next/link';
+
 export default function About() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="lg:text-center mb-12">
-          <h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">About Us</h2>
-          <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-            The AI Engineer Challenge
-          </p>
-          <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-            Empowering developers to build the future of AI applications.
-          </p>
-        </div>
-
-        <div className="mt-10">
-          <div className="prose prose-indigo prose-lg text-gray-500 mx-auto">
-            <p>
-              The AI Engineer Challenge is a platform designed to help developers master the art of building AI-powered applications. 
-              Our mission is to provide the tools, resources, and community support needed to create innovative AI solutions.
-            </p>
-            
-            <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Our Mission</h3>
-            <p>
-              We believe that AI technology should be accessible to all developers. Our platform provides:
-            </p>
-            <ul className="list-disc list-inside mb-6">
-              <li>Comprehensive learning resources</li>
-              <li>Hands-on project experience</li>
-              <li>Community support and collaboration</li>
-              <li>Industry-standard tools and practices</li>
-            </ul>
-
-            <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Join Our Community</h3>
-            <p>
-              Whether you&apos;re just starting your journey in AI development or you&apos;re an experienced engineer looking to expand your skills, 
-              we welcome you to join our growing community of AI engineers.
-            </p>
-
-            <div className="mt-8 flex justify-center">
-              <a
-                href="/dashboard"
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
-              >
-                Start Your Journey
-              </a>
+    <div className="min-h-screen bg-white">
+      {/* Navigation */}
+      <nav className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16">
+            <div className="flex">
+              <div className="flex-shrink-0 flex items-center">
+                <h1 className="text-xl font-bold">AI Engineer</h1>
+              </div>
+              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <Link href="/" className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Home
+                </Link>
+                <Link href="/about" className="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  About
+                </Link>
+                <Link href="/dashboard" className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Dashboard
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="max-w-4xl mx-auto p-4">
+        <h1 className="text-3xl font-bold text-center my-8">About AI Engineer</h1>
+        <div className="prose lg:prose-xl mx-auto">
+          <p>
+            Welcome to AI Engineer, a platform that leverages the power of various GPT models
+            to assist with your tasks. Our interface provides access to different GPT models,
+            each suited for specific needs and requirements.
+          </p>
+          <h2>Available Models</h2>
+          <ul>
+            <li><strong>GPT-3.5 Turbo:</strong> Fast and efficient for most tasks</li>
+            <li><strong>GPT-4:</strong> Most capable model for complex tasks</li>
+            <li><strong>GPT-3.5 Turbo 16K:</strong> Extended context window for longer conversations</li>
+            <li><strong>GPT-4 32K:</strong> Maximum context window for comprehensive analysis</li>
+          </ul>
+        </div>
+      </main>
     </div>
   );
 } 
