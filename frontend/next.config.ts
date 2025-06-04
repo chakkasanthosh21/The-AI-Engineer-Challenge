@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  output: 'standalone',
+const config = {
+  reactStrictMode: true,
+  swcMinify: true,
   experimental: {
-    serverActions: true,
+    serverActions: false
   },
   async headers() {
     return [
@@ -10,13 +11,13 @@ const nextConfig = {
         source: '/:path*',
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'no-store',
-          },
-        ],
-      },
-    ]
-  },
-}
+            key: 'Access-Control-Allow-Origin',
+            value: '*'
+          }
+        ]
+      }
+    ];
+  }
+};
 
-export default nextConfig;
+export default config;
